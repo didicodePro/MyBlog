@@ -12,7 +12,7 @@ using MyBlog.Data;
 namespace MyBlog.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250308131957_InitialCreate")]
+    [Migration("20250308171007_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
