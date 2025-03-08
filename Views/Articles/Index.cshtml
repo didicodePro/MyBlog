@@ -1,0 +1,25 @@
+﻿@model IEnumerable<MyBlog.Models.Article>
+
+@{
+    ViewBag.Title = "Liste des Articles";
+}
+
+<h2>Liste des Articles</h2>
+
+@foreach (var article in Model)
+{
+    <div class="article-card">
+        <h3>@article.Titre</h3>
+        <p>Publié le @article.DatePublication.ToShortDateString()</p>
+        <p>
+            <!-- On affiche un extrait du contenu, par exemple -->
+            @(article.Contenu.Length > 100
+                ? article.Contenu.Substring(0, 100) + "..."
+                : article.Contenu)
+        </p>
+        <p>
+            <!-- Bouton ou lien "Lire la suite" -->
+            @Html.ActionLink("Lire la suite", "Details", "Articles", new { id = article.Id }, new { @class = "btn btn-primary" })
+        </p>
+    </div>
+}

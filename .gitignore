@@ -1,0 +1,21 @@
+# Dossiers générés
+.vs/
+bin/
+obj/
+packages/
+
+# Fichiers spécifiques à Visual Studio
+*.suo
+*.user
+*.cache
+*.pdb
+
+# Fichiers de configuration spécifiques
+BlogFrontend.csproj.user
+Web.Debug.config
+Web.Release.config
+
+# Autres fichiers temporaires
+*.log
+Thumbs.db
+desktop.ini
