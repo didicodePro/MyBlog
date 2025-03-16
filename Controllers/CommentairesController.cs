@@ -2,28 +2,61 @@
 using MyBlog.Data;
 using MyBlog.Models;
 
-public class CommentairesController : Controller
+namespace MyBlog.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public CommentairesController(AppDbContext context)
+    public class CommentaireController : Controller
     {
-        _context = context;
-    }
+        private readonly AppDbContext _context;
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Create([Bind("ArticleId,Auteur,Contenu")] Commentaire commentaire)
-    {
-        if (ModelState.IsValid)
+        public CommentaireController(AppDbContext context)
         {
-            commentaire.DatePublication = DateTime.Now;
+            _context = context;
+        }
+        //public async Task<IActionResult> Create([Bind("Id,Titre,Contenu,DatePublication")] Article article)
+
+        [HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> Create(int ArticleId, string Auteur, string Contenu)
+        {
+            Console.WriteLine($"Reçu : ArticleId={ArticleId}, Auteur={Auteur}, Contenu={Contenu}");
+
+            // 1️⃣ Vérifie si l'article existe AVANT d'ajouter un commentaire
+            var article = await _context.Articles.FindAsync(ArticleId);
+            if (article == null)
+            {
+                TempData["Error"] = "L'article auquel vous essayez d'ajouter un commentaire n'existe pas.";
+                return RedirectToAction("Index", "Articles");
+            }
+
+            if (string.IsNullOrEmpty(Auteur) || string.IsNullOrEmpty(Contenu))
+            {
+                TempData["Error"] = "Veuillez remplir tous les champs.";
+                return RedirectToAction("Details", "Articles", new { id = ArticleId });
+            }
+
+            // 2️⃣ Lier explicitement l'article au commentaire
+            var commentaire = new Commentaire
+            {
+                ArticleId = ArticleId,
+                Auteur = Auteur,
+                Contenu = Contenu,
+                DatePublication = DateTime.Now,
+                Article = article // C'est cette ligne qui assure la liaison
+            };
+
             _context.Commentaires.Add(commentaire);
-            _context.SaveChanges();
-            return RedirectToAction("Details", "Articles", new { id = commentaire.ArticleId });
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Articles", new { id = ArticleId });
         }
 
-        // Si problème de validation, on revient sur l'article d'origine
-        return RedirectToAction("Details", "Articles", new { id = commentaire.ArticleId });
+
+
+        // Test : Vérifier si la route existe en GET
+        [HttpGet]
+        public IActionResult Test()
+        {
+            return Content("Le contrôleur fonctionne !");
+        }
     }
 }

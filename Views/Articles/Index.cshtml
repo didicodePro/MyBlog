@@ -4,22 +4,28 @@
     ViewBag.Title = "Liste des Articles";
 }
 
-<h2>Liste des Articles</h2>
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">📰 Liste des Articles</h2>
 
-@foreach (var article in Model)
-{
-    <div class="article-card">
-        <h3>@article.Titre</h3>
-        <p>Publié le @article.DatePublication.ToShortDateString()</p>
-        <p>
-            <!-- On affiche un extrait du contenu, par exemple -->
-            @(article.Contenu.Length > 100
-                ? article.Contenu.Substring(0, 100) + "..."
-                : article.Contenu)
-        </p>
-        <p>
-            <!-- Bouton ou lien "Lire la suite" -->
-            @Html.ActionLink("Lire la suite", "Details", "Articles", new { id = article.Id }, new { @class = "btn btn-primary" })
-        </p>
+    <div class="row">
+        @foreach (var article in Model)
+        {
+            <div class="col-md-6">
+                <div class="card article-card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-dark">@article.Titre</h4>
+                        <p class="text-muted">🕒 Publié le @article.DatePublication.ToShortDateString()</p>
+                        <p class="card-text">
+                            @(article.Contenu.Length > 150
+                                ? article.Contenu.Substring(0, 150) + "..."
+                                : article.Contenu)
+                        </p>
+                        <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-primary">
+                            📖 Lire la suite
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-}
+</div>

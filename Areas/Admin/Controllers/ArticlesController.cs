@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MyBlog.Data;
 using MyBlog.Models;
 
-namespace MyBlog.Areas.Admin
+namespace MyBlog.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class ArticlesController : Controller

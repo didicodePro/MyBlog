@@ -15,8 +15,10 @@ namespace MyBlog.Models
 
         public DateTime DatePublication { get; set; } = DateTime.Now;
 
-        // Clé étrangère vers l'article
+        // Clé étrangère vers Article
         public int ArticleId { get; set; }
-        public Article Article { get; set; }
+
+        // Supprimer la contrainte obligatoire sur Article en ajoutant "?"
+        public Article? Article { get; set; }
     }
 }

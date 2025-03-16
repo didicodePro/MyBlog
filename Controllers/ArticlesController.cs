@@ -25,16 +25,12 @@ namespace MyBlog.Controllers
             return View(await _context.Articles.ToListAsync());
         }
 
-        // GET: Articles/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var article = await _context.Articles
+                .Include(a => a.Commentaires) // 🔥 Charger les commentaires liés
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (article == null)
             {
                 return NotFound();
@@ -153,16 +149,5 @@ namespace MyBlog.Controllers
         {
             return _context.Articles.Any(e => e.Id == id);
         }
-
-        //public IActionResult Details(int id)
-        //{
-        //    var article = _context.Articles
-        //                          .Include(a => a.Commentaires)
-        //                          .FirstOrDefault(a => a.Id == id);
-        //    if (article == null) return NotFound();
-
-        //    return View(article);
-        //}
-
     }
 }

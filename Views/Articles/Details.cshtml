@@ -3,33 +3,55 @@
 @{
     ViewData["Title"] = "Details";
 }
+<h2>@Model.Titre</h2>
+<p>@Model.Contenu</p>
+<p><strong>Publié le :</strong> @Model.DatePublication.ToString("dd/MM/yyyy")</p>
 
-<h1>Details</h1>
-<p>
-    @Html.ActionLink("Retour à la liste", "Index")
-</p>
+<hr />
 
-<div>
-    <h4>Article</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Contenu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Contenu)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatePublication)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatePublication)
-        </dd>
-    </dl>
-</div>
+<h3 class="mt-4">💬 Commentaires</h3>
+
+@if (Model.Commentaires.Any())
+{
+    <div class="comment-container">
+        @foreach (var commentaire in Model.Commentaires)
+        {
+            <div class="comment-box">
+                <div class="comment-header">
+                    <strong>@commentaire.Auteur</strong>
+                    <span class="comment-date">@commentaire.DatePublication.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <p class="comment-content">@commentaire.Contenu</p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted">Aucun commentaire pour cet article.</p>
+}
+
+
+<h3 class="mt-4">📝 Ajouter un commentaire</h3>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-controller="Commentaire" asp-action="Create" method="post" class="comment-form">
+    <input type="hidden" name="ArticleId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label class="form-label">👤 Nom :</label>
+        <input type="text" name="Auteur" class="form-control" placeholder="Votre nom" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">✍️ Commentaire :</label>
+        <textarea name="Contenu" class="form-control" placeholder="Votre message" rows="3" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Envoyer</button>
+</form>
+

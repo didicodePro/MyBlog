@@ -1,0 +1,35 @@
+﻿@model List<MyBlog.Models.Commentaire>
+
+<h2 class="mb-4">📋 Gestion des Commentaires</h2>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Auteur</th>
+            <th>Contenu</th>
+            <th>Article</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var commentaire in Model)
+        {
+            <tr>
+                <td>@commentaire.Id</td>
+                <td>@commentaire.Auteur</td>
+                <td>@commentaire.Contenu</td>
+                <td> <a asp-area="Admin" asp-controller="Articles" asp-action="Details" asp-route-id="@commentaire.ArticleId">@commentaire.Article.Titre</a></td>
+                <td>@commentaire.DatePublication.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Commentaires" asp-action="Delete" asp-route-id="@commentaire.Id"
+                       class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">
+                        Supprimer
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
