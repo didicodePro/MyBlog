@@ -14,8 +14,9 @@ namespace MyBlog.Models
         public required string Contenu { get; set; }
 
         public DateTime DatePublication { get; set; } = DateTime.Now;
+
+        public string? ImagePath { get; set; }
+
         public virtual ICollection<Commentaire> Commentaires { get; set; } = [];
-
-
     }
 }
