@@ -7,7 +7,7 @@
 <div class="container mt-4">
     <div class="card shadow-lg p-4">
         <h2 class="mb-4 text-primary">
-            <span>📌</span> Gestion des Articles
+             Gestion des Articles
         </h2>
 
         <p>
@@ -20,7 +20,7 @@
             <thead class="table-dark text-center">
                 <tr>
                     <th>ID</th>
-                    <th>Image</th> <!-- 🖼️ Nouvelle colonne pour l’image -->
+                    <th>Image</th>
                     <th>Titre</th>
                     <th>Contenu</th>
                     <th>Date de Publication</th>
@@ -33,7 +33,6 @@
                     <tr>
                         <td class="text-center">@item.Id</td>
 
-                        <!-- 🖼️ Affichage de l’image si disponible -->
                         <td class="text-center">
                             @if (!string.IsNullOrEmpty(item.ImagePath))
                             {
@@ -54,16 +53,16 @@
                             <div class="btn-group" role="group">
                                 <a asp-area="Admin" asp-controller="Articles" asp-action="Edit" asp-route-id="@item.Id"
                                    class="btn btn-warning btn-sm">
-                                    ✏️ Modifier
+                                    Modifier
                                 </a>
                                 <a asp-area="Admin" asp-controller="Articles" asp-action="Details" asp-route-id="@item.Id"
                                    class="btn btn-info btn-sm">
-                                    🔍 Détails
+                                    Détails
                                 </a>
                                 <a asp-area="Admin" asp-controller="Articles" asp-action="Delete" asp-route-id="@item.Id"
                                    class="btn btn-danger btn-sm"
-                                   onclick="return confirm('⚠️ Voulez-vous vraiment supprimer cet article ?');">
-                                    ❌ Supprimer
+                                   onclick="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+                                    Supprimer
                                 </a>
                             </div>
                         </td>

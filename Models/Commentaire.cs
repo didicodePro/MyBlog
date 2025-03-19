@@ -20,5 +20,8 @@ namespace MyBlog.Models
 
         // Supprimer la contrainte obligatoire sur Article en ajoutant "?"
         public Article? Article { get; set; }
+
+        // Add-Migration messageMigration
+        // Update-Database
     }
 }

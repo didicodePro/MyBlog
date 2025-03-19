@@ -20,7 +20,7 @@ namespace MyBlog.Controllers
         {
             Console.WriteLine($"Reçu : ArticleId={ArticleId}, Auteur={Auteur}, Contenu={Contenu}");
 
-            // 1️⃣ Vérifie si l'article existe AVANT d'ajouter un commentaire
+            // 1️ Vérifie si l'article existe AVANT d'ajouter un commentaire
             var article = await _context.Articles.FindAsync(ArticleId);
             if (article == null)
             {
@@ -34,7 +34,7 @@ namespace MyBlog.Controllers
                 return RedirectToAction("Details", "Articles", new { id = ArticleId });
             }
 
-            // 2️⃣ Lier explicitement l'article au commentaire
+            // 2️ Lier explicitement l'article au commentaire
             var commentaire = new Commentaire
             {
                 ArticleId = ArticleId,
@@ -48,15 +48,6 @@ namespace MyBlog.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", "Articles", new { id = ArticleId });
-        }
-
-
-
-        // Test : Vérifier si la route existe en GET
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Content("Le contrôleur fonctionne !");
         }
     }
 }
