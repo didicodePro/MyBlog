@@ -230,3 +230,33 @@ padding-right: 5px;
 .main-title{
     font-size: 48px;
 }
+
+/* Style des sous-commentaires (réponses) */
+.replies {
+border-left: 2px solid #ddd;
+padding-left: 10px;
+}
+
+.replies .comment-box {
+    margin-top: 10px;
+}
+
+/* Bouton répondre */
+.btn-outline-primary {
+font-size: 0.9rem;
+padding: 5px 10px;
+}
+
+.btn-link {
+font-size: 0.9rem;
+color: #007bff;
+cursor: pointer;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.comment-box {
+    margin-bottom: 10px;
+}

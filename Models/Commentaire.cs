@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyBlog.Models
 {
@@ -15,13 +16,16 @@ namespace MyBlog.Models
 
         public DateTime DatePublication { get; set; } = DateTime.Now;
 
-        // Clé étrangère vers Article
+        // Clé étrangère vers l'article
         public int ArticleId { get; set; }
+        public Article Article { get; set; }
 
-        // Supprimer la contrainte obligatoire sur Article en ajoutant "?"
-        public Article? Article { get; set; }
+        // Clé étrangère pour gérer les réponses (imbriquer les commentaires)
+        public int? ParentId { get; set; } 
+        [ForeignKey("ParentId")]
+        public virtual Commentaire? Parent { get; set; }
 
-        // Add-Migration messageMigration
-        // Update-Database
+        // Liste des réponses associées à un commentaire
+        public virtual ICollection<Commentaire>? Replies { get; set; } = new List<Commentaire>();
     }
 }

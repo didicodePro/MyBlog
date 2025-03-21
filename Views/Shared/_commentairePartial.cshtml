@@ -1,0 +1,43 @@
+﻿@model MyBlog.Models.Commentaire
+
+<div class="comment-box">
+    <div class="comment-header">
+        <strong>@Model.Auteur</strong>
+        <span class="comment-date">@Model.DatePublication.ToString("dd/MM/yyyy HH:mm")</span>
+    </div>
+    <p class="comment-content">@Model.Contenu</p>
+
+    <!-- Bouton Répondre -->
+    <button class="btn btn-sm btn-outline-primary" onclick="toggleForm(@Model.Id)">↩ Répondre</button>
+
+    <!-- Formulaire de réponse -->
+    <form id="reply-form-@Model.Id" class="comment-form mt-2 d-none"
+          asp-controller="Commentaire" asp-action="Create" method="post">
+        <input type="hidden" name="articleId" value="@Model.ArticleId" />
+        <input type="hidden" name="parentId" value="@Model.Id" />
+        <div class="mb-2">
+            <input type="text" name="auteur" class="form-control" placeholder="Votre nom" required />
+        </div>
+        <div class="mb-2">
+            <textarea name="contenu" class="form-control" rows="2" placeholder="Votre réponse..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary">Envoyer</button>
+    </form>
+
+    <!-- Les sous-réponses doivent être imbriquées ici -->
+    @if (Model.Replies != null && Model.Replies.Any())
+    {
+        <div class="replies mt-2 ms-4">
+            <button class="btn btn-link p-0" onclick="toggleReplies(@Model.Id)">
+                🔽 Voir les réactions (@Model.Replies.Count())
+            </button>
+
+            <div id="replies-@Model.Id" class="d-none">
+                @foreach (var reply in Model.Replies)
+                {
+                    @Html.Partial("_CommentairePartial", reply)
+                }
+            </div>
+        </div>
+    }
+</div>

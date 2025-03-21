@@ -28,7 +28,8 @@ namespace MyBlog.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var article = await _context.Articles
-                .Include(a => a.Commentaires) // 🔥 Charger les commentaires liés
+                .Include(a => a.Commentaires)
+                    .ThenInclude(c => c.Replies) 
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (article == null)
@@ -38,5 +39,7 @@ namespace MyBlog.Controllers
 
             return View(article);
         }
+
+
     }
 }

@@ -15,39 +15,28 @@ namespace MyBlog.Controllers
         //public async Task<IActionResult> Create([Bind("Id,Titre,Contenu,DatePublication")] Article article)
 
         [HttpPost]
-        [HttpPost]
-        public async Task<IActionResult> Create(int ArticleId, string Auteur, string Contenu)
+        public async Task<IActionResult> Create(int articleId, string auteur, string contenu, int? parentId)
         {
-            Console.WriteLine($"Reçu : ArticleId={ArticleId}, Auteur={Auteur}, Contenu={Contenu}");
-
-            // 1️ Vérifie si l'article existe AVANT d'ajouter un commentaire
-            var article = await _context.Articles.FindAsync(ArticleId);
-            if (article == null)
-            {
-                TempData["Error"] = "L'article auquel vous essayez d'ajouter un commentaire n'existe pas.";
-                return RedirectToAction("Index", "Articles");
-            }
-
-            if (string.IsNullOrEmpty(Auteur) || string.IsNullOrEmpty(Contenu))
+            if (string.IsNullOrEmpty(auteur) || string.IsNullOrEmpty(contenu))
             {
                 TempData["Error"] = "Veuillez remplir tous les champs.";
-                return RedirectToAction("Details", "Articles", new { id = ArticleId });
+                return RedirectToAction("Details", "Articles", new { id = articleId });
             }
 
-            // 2️ Lier explicitement l'article au commentaire
             var commentaire = new Commentaire
             {
-                ArticleId = ArticleId,
-                Auteur = Auteur,
-                Contenu = Contenu,
+                ArticleId = articleId,
+                Auteur = auteur,
+                Contenu = contenu,
                 DatePublication = DateTime.Now,
-                Article = article // C'est cette ligne qui assure la liaison
+                ParentId = parentId  
             };
 
             _context.Commentaires.Add(commentaire);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", "Articles", new { id = ArticleId });
+            return RedirectToAction("Details", "Articles", new { id = articleId });
         }
+
     }
 }

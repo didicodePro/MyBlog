@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyBlog.Data;
 using MyBlog.Models;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace MyBlog.Areas.Admin.Controllers
 {
@@ -53,27 +55,32 @@ namespace MyBlog.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Admin/Articles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public async Task<IActionResult> Create(Article article, IFormFile? ImageFile)
         {
             if (ModelState.IsValid)
             {
-                // Gérer l’upload d’image
+                // ✅ Gérer l’upload d’image en local
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
                     string uniqueFileName = Guid.NewGuid().ToString() + "_" + ImageFile.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
+                    // Vérifier si le dossier "uploads" existe, sinon le créer
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Sauvegarde du fichier
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         await ImageFile.CopyToAsync(fileStream);
                     }
 
-                    article.ImagePath = "/uploads/" + uniqueFileName; // Enregistre le chemin de l’image
+                    // 🔄 Enregistre le chemin relatif de l'image
+                    article.ImagePath = "/uploads/" + uniqueFileName;
                 }
 
                 _context.Add(article);
@@ -82,6 +89,7 @@ namespace MyBlog.Areas.Admin.Controllers
             }
             return View(article);
         }
+
 
         // GET: Admin/Articles/Edit/5
         public async Task<IActionResult> Edit(int? id)

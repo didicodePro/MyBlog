@@ -11,47 +11,42 @@
 
 <h3 class="mt-4">💬 Commentaires</h3>
 
-@if (Model.Commentaires.Any())
+<div class="comment-form mt-3">
+    <h4>📝 Ajouter un commentaire</h4>
+    <form asp-controller="Commentaire" asp-action="Create" method="post">
+        <input type="hidden" name="articleId" value="@Model.Id" />
+        <div class="mb-2">
+            <input type="text" name="auteur" class="form-control" placeholder="Votre nom" required />
+        </div>
+        <div class="mb-2">
+            <textarea name="contenu" class="form-control" rows="3" placeholder="Votre commentaire..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+</div>
+
+@if (Model.Commentaires != null && Model.Commentaires.Any())
 {
     <div class="comment-container">
-        @foreach (var commentaire in Model.Commentaires)
+        @foreach (var commentaire in Model.Commentaires.Where(c => c.ParentId == null))
         {
-            <div class="comment-box">
-                <div class="comment-header">
-                    <strong>@commentaire.Auteur</strong>
-                    <span class="comment-date">@commentaire.DatePublication.ToString("dd/MM/yyyy HH:mm")</span>
-                </div>
-                <p class="comment-content">@commentaire.Contenu</p>
-            </div>
+            @Html.Partial("_CommentairePartial", commentaire)
         }
     </div>
 }
 else
 {
-    <p class="text-muted">Aucun commentaire pour cet article.</p>
+    <p>Aucun commentaire pour cet article.</p>
 }
 
+<script>
+    function toggleForm(id) {
+        const form = document.getElementById(`reply-form-${id}`);
+        form.classList.toggle('d-none');
+    }
 
-<h3 class="mt-4">📝 Ajouter un commentaire</h3>
-
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-
-<form asp-controller="Commentaire" asp-action="Create" method="post" class="comment-form">
-    <input type="hidden" name="ArticleId" value="@Model.Id" />
-
-    <div class="mb-3">
-        <label class="form-label">👤 Nom :</label>
-        <input type="text" name="Auteur" class="form-control" placeholder="Votre nom" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">✍️ Commentaire :</label>
-        <textarea name="Contenu" class="form-control" placeholder="Votre message" rows="3" required></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Envoyer</button>
-</form>
-
+    function toggleReplies(id) {
+        const replies = document.getElementById(`replies-${id}`);
+        replies.classList.toggle('d-none');
+    }
+</script>
